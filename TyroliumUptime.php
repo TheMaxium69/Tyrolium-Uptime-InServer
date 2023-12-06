@@ -11,6 +11,7 @@ $TyroUptime_tag = "vps214";
 if (!empty($_GET['uptime']) && $_GET['uptime'] == "1"){
 
     header('Access-Control-Allow-Origin: *');
+    header('Content-Type: application/json');
 
     $msg = [
         "status" => "true",
