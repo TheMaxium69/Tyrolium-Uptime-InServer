@@ -1,12 +1,17 @@
 <?php
 
+// Env Variable
+
+$TyroUptime_tag = "vps000"; /* EXEMPLE : vps211 */
+$TyroUptime_type = "vps"; /* Type: vps OR cloud OR int OR proxy OR vpn */
 $TyroUptime_ips = [
-    "localhost",
-    "home.tyrolium.fr"
+    "vps.tyrolium.fr",
+    "home.vps.tyrolium.fr",
+    "127.0.0.1"
 ];
 
-$TyroUptime_tag = "vps214";
 
+// API
 
 if (!empty($_GET['uptime']) && $_GET['uptime'] == "1"){
 
@@ -23,17 +28,18 @@ if (!empty($_GET['uptime']) && $_GET['uptime'] == "1"){
 
 }
 
+// SCRIPT
 
 foreach ($TyroUptime_ips as $ip) {
 
     if ($_SERVER['HTTP_HOST'] == $ip) {
-        CreateUptimePage($TyroUptime_tag);
+        CreateUptimePage($TyroUptime_tag, $TyroUptime_type);
         exit();
     }
 
 }
 
-function CreateUptimePage($tyrotag) {
+function CreateUptimePage($tyrotag, $tyrotype) {
 ?>
 <!DOCTYPE html>
 <html>
@@ -81,6 +87,7 @@ function CreateUptimePage($tyrotag) {
 
         <div class="textC">
             <h6>Vous êtes connecter au :</h6><br>
+            <img src="https://tyrolium.fr/uptime/assets/<?= $tyrotype ?>" width="225" height="225">
             <h1 style="text-transform: uppercase"><?= $tyrotag ?> de TYROLIUM</h1>
         </div>
         <a href="https://tyrolium.fr/uptime/">Plus d'information</a>
