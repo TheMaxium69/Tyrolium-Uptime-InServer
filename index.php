@@ -170,8 +170,8 @@ function CreateUptimePage($tyrotag, $tyrotype) {
 function getPing(){
 
     $ping = [
-        "delai" => null,
-        "unité" => null
+        "latency" => null,
+        "unit" => null
     ];
 
     if (isset($_GET['time'])){
@@ -192,8 +192,8 @@ function getPing(){
 
         // Construction de la réponse demandée
         $ping = [
-                "delai" => $diff, // Vous avez demandé une string ("1")
-                "unité" => "ms"
+                "latency" => $diff, // Vous avez demandé une string ("1")
+                "unit" => "ms"
         ];
 
     }
