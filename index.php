@@ -13,9 +13,23 @@ if (!empty($_GET['uptime']) && $_GET['uptime'] == "1"){
 
     $msg = [
         "status" => "true",
-        "time" => $_SERVER['REQUEST_TIME'],
-        "host" => $_SERVER['HTTP_HOST']
+        "content" => [
+                "tag" => $TyroUptime_tag,
+                "type" => $TyroUptime_type
+        ],
+        "request" => [
+            "host" => $_SERVER['HTTP_HOST'],
+            "uri" => $_SERVER['REQUEST_URI'],
+            "method" => $_SERVER['REQUEST_METHOD'],
+            "protocol" => $_SERVER['SERVER_PROTOCOL'],
+        ],
+        "client" => [
+            "ip" => $_SERVER['REMOTE_ADDR'],
+            "agent" => $_SERVER['HTTP_USER_AGENT'],
+        ],
+        "ping" => getPing()
     ];
+
     echo json_encode($msg);
     exit();
 
@@ -150,4 +164,45 @@ function CreateUptimePage($tyrotag, $tyrotype) {
     </body>
     </html>
 
-<?php } ?>
+<?php }
+
+
+function getPing(){
+
+    $ping = [
+        "delai" => null,
+        "unité" => null
+    ];
+
+    if (isset($_GET['time'])){
+
+        $timeClient = $_GET['time'];
+
+        // 1. Temps du Client (envoyé en GET, en millisecondes)
+        // On force en 'float' pour pouvoir faire des maths
+        $clientTimeMs = (float)$timeClient;
+
+        // 2. Temps du Serveur (actuel, converti en millisecondes)
+        // microtime(true) donne des secondes, on multiplie par 1000
+        $serverTimeMs = microtime(true) * 1000;
+
+        // 3. Calcul de la différence (Latence + Décalage horloge)
+        // On arrondit pour éviter les chiffres à virgule trop longs
+        $diff = round($serverTimeMs - $clientTimeMs);
+
+        // Construction de la réponse demandée
+        $ping = [
+                "delai" => $diff, // Vous avez demandé une string ("1")
+                "unité" => "ms"
+        ];
+
+    }
+
+   return $ping;
+}
+
+
+
+
+
+?>
