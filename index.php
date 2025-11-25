@@ -169,31 +169,26 @@ function CreateUptimePage($tyrotag, $tyrotype) {
 
 function getPing(){
 
+    $serverTimeMs = microtime(true) * 1000;
+
     $ping = [
         "latency" => null,
-        "unit" => null
+        "unit" => null,
+        "server_time_ms" => round($serverTimeMs),
     ];
 
     if (isset($_GET['time'])){
 
         $timeClient = $_GET['time'];
 
-        // 1. Temps du Client (envoyé en GET, en millisecondes)
-        // On force en 'float' pour pouvoir faire des maths
         $clientTimeMs = (float)$timeClient;
 
-        // 2. Temps du Serveur (actuel, converti en millisecondes)
-        // microtime(true) donne des secondes, on multiplie par 1000
-        $serverTimeMs = microtime(true) * 1000;
-
-        // 3. Calcul de la différence (Latence + Décalage horloge)
-        // On arrondit pour éviter les chiffres à virgule trop longs
         $diff = round($serverTimeMs - $clientTimeMs);
 
-        // Construction de la réponse demandée
         $ping = [
-                "latency" => $diff, // Vous avez demandé une string ("1")
-                "unit" => "ms"
+                "latency" => $diff,
+                "unit" => "ms",
+                "server_time_ms" => round($serverTimeMs)
         ];
 
     }
